@@ -54,8 +54,8 @@
   }
   .photo{
     flex:0 0 auto;
-    width:96px;
-    height:96px;
+    width:150px;
+    height:150px;
     border-radius:50%;
     border:2px dashed var(--ink-soft);
     background:repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.04) 8px, rgba(0,0,0,0.04) 16px);
@@ -233,6 +233,11 @@
   .topics ul{columns:2; column-gap:24px;}
   .topics li{break-inside:avoid; margin-bottom:4px;}
   @media (max-width:600px){ .topics ul{columns:1;} }
+  @media (max-width:520px){
+    header{flex-direction:column; text-align:center; align-items:center;}
+    .photo{width:130px; height:130px;}
+    .subline{justify-content:center;}
+  }
   .ctrl-table{
     width:100%;
     border-collapse:collapse;
@@ -393,7 +398,9 @@
 <body>
 
 <header>
-  <div class="photo" id="photoBox" data-basename="griffin">Add photo</div>
+  <div class="photo" id="photoBox" data-basename="griffin">
+    <img class="media-el" src="images/griffin.jpg" alt="Griffin Gil De Leon" onerror="this.style.display='none'">
+  </div>
   <div class="header-text">
     <p class="eyebrow">Practicum Record — SY 2022–2026</p>
     <h1>Griffin Gil De Leon</h1>
@@ -434,7 +441,7 @@
     <h2>Curriculum Vitae</h2>
     <div class="record">
       <p>Download the full CV as a PDF, or review the highlights across this page.</p>
-      <a class="cv-btn" href="Griffin_Gil_De_Leon_CV.pdf" download>⬇ Download CV (PDF)</a>
+      <a class="cv-btn" href="Griffin_Gil_De_Leon_cv.pdf" download>⬇ Download CV (PDF)</a>
     </div>
   </section>
 
