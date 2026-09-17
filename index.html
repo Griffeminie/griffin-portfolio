@@ -256,9 +256,73 @@
   }
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(320px,1fr));
+    grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px),1fr));
     gap:20px;
   }
+
+  /* --- Certificates (redesigned collapsible) --- */
+  .certificate{
+    border:1px solid var(--paper-line);
+    background:rgba(255,255,255,0.5);
+    margin-top:12px;
+    overflow:hidden;
+  }
+  .certificate + .certificate{margin-top:14px;}
+  .certificate summary{
+    list-style:none;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px 18px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:14.5px;
+    color:var(--ink);
+    background:var(--folder);
+    transition:background .2s;
+  }
+  .certificate summary::-webkit-details-marker{display:none;}
+  .certificate summary:hover{background:#dcd2b3;}
+  .certificate summary:focus-visible{outline:2px solid var(--stamp); outline-offset:-2px;}
+  .certificate-hint{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--stamp);
+  }
+  .certificate-hint::after{
+    content:"";
+    width:8px;
+    height:8px;
+    border-right:2px solid var(--stamp);
+    border-bottom:2px solid var(--stamp);
+    transform:rotate(45deg);
+    transition:transform .2s;
+  }
+  .certificate[open] .certificate-hint::after{transform:rotate(-135deg);}
+  .certificate-content{padding:18px;}
+  .certificate-content a{color:var(--stamp); font-weight:600;}
+  .certificate-content ul{margin:0 0 4px;}
+  .certificate-pdf-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--stamp);
+    text-decoration:none;
+    border:1px solid var(--stamp);
+    padding:9px 16px;
+    margin-top:4px;
+  }
+  .certificate-pdf-link:hover{background:var(--stamp); color:var(--paper);}
+
+  /* --- Screenshot galleries --- */
   .shot{
     border:1px dashed var(--ink-soft);
     background:repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(0,0,0,0.03) 8px, rgba(0,0,0,0.03) 16px);
@@ -294,6 +358,97 @@
     padding:10px;
     pointer-events:none;
   }
+
+  /* Grids with a single screenshot: show it big, centered, no gallery chrome */
+  .grid.grid--single{display:block;}
+  .grid.grid--single .shot{
+    max-width:560px;
+    max-height:440px;
+    margin:0 auto;
+    aspect-ratio:auto;
+    background:var(--folder);
+  }
+  .grid.grid--single .shot img,
+  .grid.grid--single .shot video{object-fit:contain;}
+
+  /* Grids with 2+ screenshots: one large viewer with prev/next arrows */
+  .grid.grid--gallery{
+    display:block;
+    position:relative;
+    background:var(--folder);
+    border:1px solid var(--paper-line);
+    padding:0;
+  }
+  .grid.grid--gallery:focus-visible{outline:2px solid var(--stamp); outline-offset:2px;}
+  .grid.grid--gallery .shot{
+    display:none;
+    width:100%;
+    height:460px;
+    max-height:62vh;
+    aspect-ratio:auto;
+    border:none;
+    box-shadow:none !important;
+    transform:none !important;
+    cursor:zoom-in;
+  }
+  .grid.grid--gallery .shot.is-active{display:flex;}
+  .grid.grid--gallery .shot img,
+  .grid.grid--gallery .shot video{object-fit:contain;}
+  @media (max-width:600px){
+    .grid.grid--gallery .shot{height:320px;}
+  }
+  .gallery-nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:none;
+    background:rgba(36,31,22,0.65);
+    color:#fff;
+    font-size:19px;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:5;
+    transition:background .2s, transform .2s;
+  }
+  .gallery-nav:hover{background:var(--stamp); transform:translateY(-50%) scale(1.06);}
+  .gallery-nav.prev{left:12px;}
+  .gallery-nav.next{right:12px;}
+  .gallery-counter{
+    position:absolute;
+    bottom:12px;
+    right:12px;
+    background:rgba(36,31,22,0.65);
+    color:#fff;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.05em;
+    padding:5px 12px;
+    border-radius:999px;
+    z-index:5;
+  }
+  .gallery-dots{
+    display:flex;
+    gap:6px;
+    justify-content:center;
+    padding:10px 0;
+    background:var(--paper);
+  }
+  .gallery-dots button{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    border:1px solid var(--stamp);
+    background:transparent;
+    padding:0;
+    cursor:pointer;
+  }
+  .gallery-dots button.is-active{background:var(--stamp);}
   .cv-btn{
     display:inline-block;
     background:var(--stamp);
@@ -393,6 +548,39 @@
     border:none;
     font-weight:300;
   }
+
+  /* Spacious project viewers and compact supporting content. */
+  header, nav, main, footer{max-width:1160px;}
+  main{padding-top:40px;}
+  .record{padding:28px; background:#faf7ef; border-color:var(--paper-line); border-radius:8px; box-shadow:0 3px 12px rgba(36,31,22,.04);}
+  .record h3{line-height:1.35;}
+  .record > p{max-width:85ch; line-height:1.7;}
+  .grid.grid--gallery, .grid.grid--single{border-radius:6px; overflow:hidden; background:#e9e4d8;}
+  .grid.grid--gallery .shot, .grid.grid--single .shot{height:clamp(240px,48vw,570px); max-height:none; max-width:none; width:100%; padding:0; border:none; aspect-ratio:auto !important;}
+  .grid .shot img{object-fit:contain;}
+  .gallery-toolbar{display:flex; align-items:center; gap:12px; padding:12px 16px; background:#fffdf8; border-top:1px solid var(--paper-line);}
+  .gallery-toolbar button, .viewer-button{border:1px solid var(--paper-line); background:var(--paper); color:var(--ink); border-radius:4px; min-width:44px; min-height:44px; cursor:pointer; font:inherit;}
+  .gallery-toolbar button:hover{background:var(--folder);}
+  .gallery-caption{flex:1; min-width:0; font-size:13px; line-height:1.5;}
+  .gallery-caption small{display:block; color:var(--ink-soft);}
+  .shot:focus-visible, button:focus-visible{outline:3px solid var(--stamp); outline-offset:-3px;}
+  .seminar-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px;}
+  .seminar-grid .topics ul{columns:1;}
+  #lightbox{padding:64px 60px 80px;}
+  #lightbox img, #lightbox video{max-width:100%; max-height:calc(100dvh - 160px); object-fit:contain;}
+  #lightbox .viewer-button{position:absolute; top:50%; transform:translateY(-50%);}
+  #lightbox .viewer-prev{left:8px;}
+  #lightbox .viewer-next{right:8px;}
+  .viewer-caption{position:absolute; bottom:18px; left:65px; right:65px; color:white; text-align:center; font-size:14px;}
+  body.viewer-open{overflow:hidden;}
+  @media(max-width:600px){
+    main{padding:28px 12px 48px;} .record{padding:18px;} nav{padding:8px 12px;}
+    .seminar-grid{grid-template-columns:1fr;} .gallery-toolbar{gap:8px; padding:8px;}
+    .gallery-caption{font-size:12px;} #lightbox{padding:60px 12px 110px;}
+    #lightbox .viewer-button{top:auto; bottom:42px; transform:none;}
+    .viewer-caption{bottom:12px; left:15px; right:15px;}
+  }
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;} .record,header,nav{animation:none; transition:none; opacity:1; transform:none;}}
 </style>
 </head>
 <body>
@@ -436,9 +624,9 @@
 
 <nav id="tabs">
   <a href="#cv" class="active">CV</a>
-  <a href="#software">Software Developed</a>
-  <a href="#internship">Internship Projects</a>
   <a href="#capstone">Capstone</a>
+  <a href="#internship">Internship Projects</a>
+  <a href="#software">Software Developed</a>
   <a href="#skills-certs">Skills &amp; Certificates</a>
   <a href="#seminars">Seminars</a>
 </nav>
@@ -450,109 +638,6 @@
     <div class="record">
       <p>Download the full CV as a PDF, or review the highlights across this page.</p>
       <a class="cv-btn" href="Griffin_Gil_De_Leon_cv.pdf" download>⬇ Download CV (PDF)</a>
-    </div>
-  </section>
-
-  <section id="software">
-    <h2>Software Developed — 1st to 4th Year</h2>
-
-    <div class="record">
-      <span class="record-tag">Machine Problem</span>
-      <h3>Talipaap — Mobile Market App</h3>
-      <p class="meta">Android · Firebase</p>
-      <p>A Firebase-powered Android app for local market shopping with real-time data and a streamlined shopping experience.</p>
-      <div class="grid">
-        <div class="shot" data-basename="talipaap-home-screen">
-  <img class="media-el" src="images/talipaap-home-screen.jpg" alt="talipaap-home-screen" loading="lazy">
-</div>
-        <div class="shot" data-basename="talipaap-product-listing">
-  <img class="media-el" src="images/talipaap-product-listing.jpg" alt="talipaap-product-listing" loading="lazy">
-</div>
-      </div>
-      <p><strong>Software used:</strong> Android Studio, Firebase, Java/Kotlin</p>
-    </div>
-
-    <div class="record">
-      <span class="record-tag">Machine Problem</span>
-      <h3>SenseGrid — IoT Room Monitoring System</h3>
-      <p class="meta">Arduino · WeMos · Firebase</p>
-      <p>An IoT system monitoring temperature, humidity, and lighting, with live data synced to Firebase.</p>
-      <div class="grid">
-        <div class="shot" data-basename="sensegrid-dashboard">
-  <img class="media-el" src="images/sensegrid-dashboard.jpg" alt="sensegrid-dashboard" loading="lazy">
-</div>
-        <div class="shot" data-basename="sensegrid-hardware-setup">
-  <img class="media-el" src="images/sensegrid-hardware-setup.jpg" alt="sensegrid-hardware-setup" loading="lazy">
-</div>
-      </div>
-      <p><strong>Software used:</strong> Arduino IDE, Firebase</p>
-    </div>
-
-    <div class="record">
-      <span class="record-tag">Machine Problem</span>
-      <h3>NestHub</h3>
-      <p class="meta">C# · ASP.NET · Azure</p>
-      <p>A web application built with ASP.NET and deployed on Microsoft Azure.</p>
-      <div class="grid">
-        <div class="shot" data-basename="nesthub-dashboard">
-  <img class="media-el" src="images/nesthub-dashboard.jpg" alt="nesthub-dashboard" loading="lazy">
-</div>
-        <div class="shot" data-basename="nesthub-core-feature">
-  <img class="media-el" src="images/nesthub-core-feature.jpg" alt="nesthub-core-feature" loading="lazy">
-</div>
-      </div>
-      <p><strong>Software used:</strong> Visual Studio, ASP.NET Web Forms, Microsoft Azure</p>
-    </div>
-
-  </section>
-
-  <section id="internship">
-    <h2>Internship Projects</h2>
-
-    <div class="record">
-      <span class="record-tag">Personal Project</span>
-      <h3>Paste &amp; Annotate — Single-File Image Annotation Tool</h3>
-      <p class="meta">HTML · CSS · JavaScript (zero dependencies)</p>
-      <p>A single-file, no-install tool for quickly marking up photos with circles, arrows, and labeled callouts — built to speed up garment QC feedback (paste a photo, circle the defect, label it, drop it into the report), but it works for any "here's a photo, mark the problem" workflow: product inspection, bug reports, design feedback, and more.</p>
-      <div class="grid">
-        <div class="shot" data-basename="paste-annotate-annotating">
-  <img class="media-el" src="images/paste-annotate-annotating.jpg" alt="paste-annotate-annotating" loading="lazy">
-</div>
-        <div class="shot" data-basename="paste-annotate-editing">
-  <img class="media-el" src="images/paste-annotate-editing.jpg" alt="paste-annotate-editing" loading="lazy">
-</div>
-      </div>
-
-      <div class="topics">
-        <p class="subhead">Key Features</p>
-        <ul>
-          <li>Paste or drag-and-drop an image directly from clipboard — no upload step</li>
-          <li>Circle, arrow, and circle+arrow annotation tools with adjustable size, thickness, and label</li>
-          <li>Persistent label field, drag-to-move/resize, zoom/pan, and 90° image rotation</li>
-          <li>One-click PNG export · zero dependencies, zero build step — it's one HTML file</li>
-        </ul>
-      </div>
-
-      <p><strong>Software used:</strong> Vanilla HTML, CSS, JavaScript — no frameworks or build tools</p>
-    </div>
-
-    <div class="record">
-      <span class="record-tag">OJT Deliverable</span>
-      <h3>Purchasing Tool — Internal Procurement Dashboard</h3>
-      <p class="meta">Node.js · Express · Python</p>
-      <p>A full-stack internal tool suite for California Clothing Inc.'s Purchasing Department: an AI vision-powered PO scanner, canvass sheet extraction with cross-supplier item matching, a live reporting dashboard, and a Python data-cleaning pipeline that cut a 30-minute manual process down to under 30 seconds.</p>
-      <div class="grid">
-        <div class="shot" data-basename="purchasing-tool-dashboard">
-  <img class="media-el" src="images/purchasing-tool-dashboard.jpg" alt="purchasing-tool-dashboard" loading="lazy">
-</div>
-        <div class="shot" data-basename="purchasing-tool-canvass-sheet">
-  <img class="media-el" src="images/purchasing-tool-canvass-sheet.jpg" alt="purchasing-tool-canvass-sheet" loading="lazy">
-</div>
-        <div class="shot" data-basename="purchasing-tool-po-scanner">
-  <img class="media-el" src="images/purchasing-tool-po-scanner.jpg" alt="purchasing-tool-po-scanner" loading="lazy">
-</div>
-      </div>
-      <p><strong>Software used:</strong> Node.js, Express, Python, Gemini API, Excel/openpyxl</p>
     </div>
   </section>
 
@@ -576,23 +661,156 @@
 
       <h3 style="margin-top:20px;">Screenshots of the GUI</h3>
       <div class="grid">
-        <div class="shot" data-basename="sealguard-dashboard">
-  <img class="media-el" src="images/sealguard-dashboard.jpg" alt="sealguard-dashboard" loading="lazy">
-</div>
-        <div class="shot" data-basename="sealguard-document-upload">
-  <img class="media-el" src="images/sealguard-document-upload.jpg" alt="sealguard-document-upload" loading="lazy">
-</div>
-        <div class="shot" data-basename="sealguard-verification-result">
-  <img class="media-el" src="images/sealguard-verification-result.jpg" alt="sealguard-verification-result" loading="lazy">
-</div>
-        <div class="shot" data-basename="sealguard-audit-log">
-  <img class="media-el" src="images/sealguard-audit-log.jpg" alt="sealguard-audit-log" loading="lazy">
-</div>
+        <div class="shot" data-basename="sealguard-dashboard-new">
+          <img class="media-el" src="images/sealguard-dashboard-new.png" alt="SealGuard document dashboard">
+        </div>
+        <div class="shot" data-basename="sealguard-documents">
+          <img class="media-el" src="images/sealguard-documents.png" alt="SealGuard document list">
+        </div>
+        <div class="shot" data-basename="sealguard-upload">
+          <img class="media-el" src="images/sealguard-upload.png" alt="SealGuard contract upload">
+        </div>
+        <div class="shot" data-basename="sealguard-verification">
+          <img class="media-el" src="images/sealguard-verification.png" alt="SealGuard verification page">
+        </div>
+        <div class="shot" data-basename="sealguard-verified-document">
+          <img class="media-el" src="images/sealguard-verified-document.png" alt="SealGuard verified document result">
+        </div>
+        <div class="shot" data-basename="sealguard-preview">
+          <img class="media-el" src="images/sealguard-preview.png" alt="SealGuard contract preview">
+        </div>
+        <div class="shot" data-basename="sealguard-help">
+          <img class="media-el" src="images/sealguard-help.png" alt="SealGuard upload and encryption guide">
+        </div>
+        <div class="shot" data-basename="sealguard-account">
+          <img class="media-el" src="images/sealguard-account.png" alt="SealGuard account dashboard">
+        </div>
       </div>
 
       <p><strong>Software used:</strong> Django 5.2, Python, PostgreSQL/SQLite, python-decouple</p>
       <p><strong>Hardware used:</strong> Development laptop; deployment/testing server</p>
     </div>
+  </section>
+
+  <section id="internship">
+    <h2>Internship Projects</h2>
+
+    <div class="record">
+      <span class="record-tag">OJT Deliverable</span>
+      <h3>Purchasing Tool — Internal Procurement Dashboard</h3>
+      <p class="meta">Node.js · Express · Python</p>
+      <p>A full-stack internal tool suite for California Clothing Inc.'s Purchasing Department: an AI vision-powered PO scanner, canvass sheet extraction with cross-supplier item matching, a live reporting dashboard, and a Python data-cleaning pipeline that cut a 30-minute manual process down to under 30 seconds.</p>
+      <div class="grid">
+        <div class="shot" data-basename="purchasing-home">
+          <img class="media-el" src="images/purchasing-home.png" alt="Purchasing tool home page">
+        </div>
+        <div class="shot" data-basename="purchasing-reports">
+          <img class="media-el" src="images/purchasing-reports.png" alt="Purchasing analytics dashboard">
+        </div>
+        <div class="shot" data-basename="purchasing-orders">
+          <img class="media-el" src="images/purchasing-orders.png" alt="Purchase order monitoring table">
+        </div>
+        <div class="shot" data-basename="purchasing-scanner">
+          <img class="media-el" src="images/purchasing-scanner.png" alt="Purchase order scanner and extracted details">
+        </div>
+        <div class="shot" data-basename="purchasing-canvass-upload">
+          <img class="media-el" src="images/purchasing-canvass-upload.png" alt="Canvass sheet upload">
+        </div>
+        <div class="shot" data-basename="purchasing-canvass-review">
+          <img class="media-el" src="images/purchasing-canvass-review.png" alt="Canvass sheet item review">
+        </div>
+      </div>
+      <p><strong>Software used:</strong> Node.js, Express, Python, Gemini API, Excel/openpyxl</p>
+    </div>
+
+    <div class="record">
+      <span class="record-tag">Personal Project</span>
+      <h3>Paste &amp; Annotate — Single-File Image Annotation Tool</h3>
+      <p class="meta">HTML · CSS · JavaScript (zero dependencies)</p>
+      <p>A single-file, no-install tool for quickly marking up photos with circles, arrows, and labeled callouts — built to speed up garment QC feedback (paste a photo, circle the defect, label it, drop it into the report), but it works for any "here's a photo, mark the problem" workflow: product inspection, bug reports, design feedback, and more.</p>
+      <div class="grid">
+        <div class="shot" data-basename="paste-annotate-annotating">
+  <img class="media-el" src="images/paste-annotate-annotating.jpg" alt="paste-annotate-annotating">
+</div>
+        <div class="shot" data-basename="paste-annotate-editing">
+  <img class="media-el" src="images/paste-annotate-editing.jpg" alt="paste-annotate-editing">
+</div>
+      </div>
+
+      <div class="topics">
+        <p class="subhead">Key Features</p>
+        <ul>
+          <li>Paste or drag-and-drop an image directly from clipboard — no upload step</li>
+          <li>Circle, arrow, and circle+arrow annotation tools with adjustable size, thickness, and label</li>
+          <li>Persistent label field, drag-to-move/resize, zoom/pan, and 90° image rotation</li>
+          <li>One-click PNG export · zero dependencies, zero build step — it's one HTML file</li>
+        </ul>
+      </div>
+
+      <p><strong>Software used:</strong> Vanilla HTML, CSS, JavaScript — no frameworks or build tools</p>
+    </div>
+  </section>
+
+  <section id="software">
+    <h2>Software Developed — 1st to 4th Year</h2>
+
+    <div class="record">
+      <span class="record-tag">Machine Problem</span>
+      <h3>Talipaap — Mobile Market App</h3>
+      <p class="meta">Android · Firebase</p>
+      <p>A Firebase-powered Android app for local market shopping with real-time data and a streamlined shopping experience.</p>
+      <div class="grid">
+        <div class="shot" data-basename="talipaap-home-screen">
+  <img class="media-el" src="images/talipaap-home-screen.jpg" alt="talipaap-home-screen">
+</div>
+        <div class="shot" data-basename="talipaap-product-listing">
+  <img class="media-el" src="images/talipaap-product-listing.jpg" alt="talipaap-product-listing">
+</div>
+      </div>
+      <p><strong>Software used:</strong> Android Studio, Firebase, Java/Kotlin</p>
+    </div>
+
+    <div class="record">
+      <span class="record-tag">Machine Problem</span>
+      <h3>SenseGrid — IoT Room Monitoring System</h3>
+      <p class="meta">Arduino · WeMos · Firebase</p>
+      <p>An IoT system monitoring temperature, humidity, and lighting, with live data synced to Firebase.</p>
+      <div class="grid">
+        <div class="shot" data-basename="sensegrid-dashboard">
+  <img class="media-el" src="images/sensegrid-dashboard.jpg" alt="sensegrid-dashboard">
+</div>
+        <div class="shot" data-basename="sensegrid-hardware-setup">
+  <img class="media-el" src="images/sensegrid-hardware-setup.jpg" alt="sensegrid-hardware-setup">
+</div>
+      </div>
+      <p><strong>Software used:</strong> Arduino IDE, Firebase</p>
+    </div>
+
+    <div class="record">
+      <span class="record-tag">Machine Problem</span>
+      <h3>NestHub</h3>
+      <p class="meta">C# · ASP.NET · Azure</p>
+      <p>A web application built with ASP.NET and deployed on Microsoft Azure.</p>
+      <div class="grid">
+        <div class="shot" data-basename="nesthub-property">
+          <img class="media-el" src="images/nesthub-property.jpg" alt="NestHub property details">
+        </div>
+        <div class="shot" data-basename="nesthub-profile">
+          <img class="media-el" src="images/nesthub-profile.jpg" alt="NestHub profile and recently viewed properties">
+        </div>
+        <div class="shot" data-basename="nesthub-agent">
+          <img class="media-el" src="images/nesthub-agent.jpg" alt="NestHub agent profile">
+        </div>
+        <div class="shot" data-basename="nesthub-mobile">
+          <img class="media-el" src="images/nesthub-mobile.jpg" alt="NestHub mobile layouts">
+        </div>
+        <div class="shot" data-basename="nesthub-database">
+          <img class="media-el" src="images/nesthub-database.jpg" alt="NestHub database diagram">
+        </div>
+      </div>
+      <p><strong>Software used:</strong> Visual Studio, ASP.NET Web Forms, Microsoft Azure</p>
+    </div>
+
   </section>
 
   <section id="skills-certs">
@@ -614,58 +832,56 @@
         <li>CCNA: Introduction to Networks (2024)</li>
         <li>CCNA: Switching, Routing, and Wireless Essentials (2024)</li>
         <li>CCNA: Ethical Hacker (2025)</li>
-        <li>CompTIA Tech+</li>
-        <li>Google Cloud Computing Foundations</li>
-        <li>Google Cloud Cybersecurity Certificate</li>
       </ul>
+      <details class="certificate">
+        <summary>CompTIA Tech+ <span class="certificate-hint">View certificate</span></summary>
+        <div class="certificate-content">
+          <p><a href="certificates/comptia-tech-plus.pdf" target="_blank" rel="noopener">Open CompTIA Tech+ certificate (PDF)</a></p>
+          <div class="grid"><div class="shot" data-basename="comptia-tech-plus"><img class="media-el" src="images/comptia-tech-plus.png" alt="CompTIA Tech+ certificate for Griffin Gil De Leon"></div></div>
+        </div>
+      </details>
+      <details class="certificate">
+        <summary>Google Cloud <span class="certificate-hint">View achievements</span></summary>
+        <div class="certificate-content">
+          <ul>
+            <li>Google Cloud Computing Foundations</li>
+            <li>Google Cloud Cybersecurity Certificate</li>
+          </ul>
+      <div class="grid">
+        <div class="shot" data-basename="google-cloud-skills">
+          <img class="media-el" src="images/google-cloud-skills.png" alt="Google Cloud Skills profile and achievements for Griffin Gil De Leon">
+        </div>
+      </div>
+        </div>
+      </details>
+
     </div>
   </section>
 
   <section id="seminars">
     <h2>Seminars &amp; Workshops</h2>
-
-    <div class="record">
-      <h3>Serverlesspresso Workshop</h3>
-      <p class="meta">AWS Student Community Day — Southfest · Feb 16, 2026 · 1:00–4:00 PM</p>
-      <p class="venue">Philippine Christian University, Aguinaldo Hwy, Dasmariñas, Cavite</p>
-      <p>Hosted by Marco Dalanon as part of an IT field trip. Serverlesspresso is a hands-on workshop that introduces event-driven, serverless architecture through a "pop-up coffee shop" scenario: participants build and deploy a serverless backend ordering system with components for customers, baristas, and display screens, using AWS Lambda, EventBridge, API Gateway, and Step Functions to see how serverless apps scale without managing infrastructure directly.</p>
-      <div class="topics">
-        <p class="subhead">Session Notes — From Cloud Theory to Cloud Deploys</p>
-        <ul>
-          <li>Cloud computing fundamentals, mental models, and delivery approaches</li>
-          <li>AWS infrastructure: ALB, ECS, RDS, ECR, Cognito, DNS lookups</li>
-          <li>Global infrastructure: regions, availability zones, edge locations (POPs), latency</li>
-          <li>Network infrastructure: VPCs (regional scale) and subnets (AZ scale)</li>
-          <li>Public vs. private subnets and security groups</li>
-          <li>Build order: network → data layer → compute → load balancing → DNS</li>
-          <li>Relational vs. non-relational databases — RDS vs. DynamoDB (and using both)</li>
-          <li>Docker fundamentals and ECS architecture: clusters, services, tasks, task definitions</li>
-          <li>EC2 vs. Fargate</li>
-          <li>Horizontal vs. vertical scaling, and the load balancer "security and routing stack"</li>
-          <li>Routing traffic with Route 53</li>
-        </ul>
+    <div class="seminar-grid">
+      <div class="record">
+        <span class="record-tag">Cloud Computing</span>
+        <h3>Serverlesspresso Workshop</h3>
+        <p class="meta">AWS Student Community Day ? February 16, 2026</p>
+        <p class="venue">Philippine Christian University, Dasmari?as</p>
+        <p>A hands-on workshop building a serverless coffee-ordering application with AWS.</p>
+        <div class="topics"><p class="subhead">Key takeaways</p><ul>
+          <li>Event-driven workflows with Lambda, EventBridge, and Step Functions</li>
+          <li>Cloud deployment, networking, and scaling fundamentals</li>
+        </ul></div>
       </div>
-    </div>
-
-    <div class="record">
-      <h3>Atlassian Lunch &amp; Learn: Unleash Collective Knowledge with Rovo AI</h3>
-      <p class="meta">Atlassian &amp; ServiceRocket · Feb 27, 2026 · 2:00–6:00 PM</p>
-      <p class="venue">The Yard, Menarco Tower, 32nd Street, BGC, Taguig City</p>
-      <p>Attended as part of an IT field trip, with sessions led by Belinda Tee (Director of Solution Architecture, ServiceRocket) and Ian Ragudo (Developer Advocate, Atlassian). The seminar traced the evolution of teamwork from co-located collaboration to digital and now AI-augmented collaboration, framed through Atlassian's System of Work: aligning work to the right goals, planning and tracking work together, and harnessing collective knowledge. A key theme was making AI part of the team itself — contrasting "tool thinking" (AI used only as a utility, which under-utilizes it) with "teammate thinking" (AI embedded as a collaborator within the system of work), and why this shift only works when AI operates as a platform rather than a bolt-on tool. A live demo showed a day working alongside an AI teammate, including streamlined workflow automation in Jira and automatic generation of release notes.</p>
-      <div class="topics">
-        <p class="subhead">Session Notes — Rovo AI &amp; the Atlassian System of Work</p>
-        <ul>
-          <li>The evolution of teamwork: co-located → digital collaboration → AI-augmented teamwork</li>
-          <li>Atlassian's System of Work: how modern work is designed</li>
-          <li>Aligning work to the right goals</li>
-          <li>Planning and tracking work together</li>
-          <li>Harnessing collective knowledge</li>
-          <li>Making AI part of the team: AI as a teammate within the system of work</li>
-          <li>Tool thinking vs. teammate thinking — why tool thinking under-utilizes AI</li>
-          <li>Why this approach only works as a platform (leadership lens)</li>
-          <li>"A day with your AI teammate" — maximizing collective knowledge through human-AI collaboration</li>
-          <li>Live demo: streamlined workflow automation in Jira, including auto-generated release notes</li>
-        </ul>
+      <div class="record">
+        <span class="record-tag">AI &amp; Collaboration</span>
+        <h3>Unleash Collective Knowledge with Rovo AI</h3>
+        <p class="meta">Atlassian &amp; ServiceRocket ? February 27, 2026</p>
+        <p class="venue">The Yard, Menarco Tower, BGC, Taguig</p>
+        <p>A session on using Rovo AI to connect team knowledge and simplify everyday work.</p>
+        <div class="topics"><p class="subhead">Key takeaways</p><ul>
+          <li>AI-assisted knowledge discovery and team collaboration</li>
+          <li>Jira workflow automation and release-note generation</li>
+        </ul></div>
       </div>
     </div>
   </section>
@@ -683,7 +899,7 @@
 </div>
 
 <script>
-  const navLinks = document.querySelectorAll('#tabs a');                                                    
+  const navLinks = document.querySelectorAll('#tabs a');
   const sections = document.querySelectorAll('main section');
 
   // highlight active nav link based on scroll position
@@ -878,58 +1094,90 @@
     });
   })();
 
-  // ---------------------------------------------------------------
-  // Lightbox: click a screenshot/video to see it enlarged
-  // ---------------------------------------------------------------
+  // One image per gallery, with a shared accessible enlarged viewer.
   (function(){
-    const lightbox = document.getElementById('lightbox');
-    const closeBtn = lightbox.querySelector('.lightbox-close');
-
-    function closeLightbox(){
-      lightbox.classList.remove('open');
-      lightbox.querySelectorAll('img, video').forEach(el => el.remove());
+    const viewer = document.getElementById('lightbox');
+    viewer.setAttribute('role', 'dialog');
+    viewer.setAttribute('aria-modal', 'true');
+    viewer.setAttribute('aria-label', 'Image gallery');
+    const close = viewer.querySelector('.lightbox-close');
+    const makeButton = (text, label, cls) => {
+      const button = document.createElement('button');
+      button.type = 'button'; button.textContent = text;
+      button.setAttribute('aria-label', label); button.title = label; button.className = cls || '';
+      return button;
+    };
+    const prev = makeButton('?', 'Previous image', 'viewer-button viewer-prev');
+    const next = makeButton('?', 'Next image', 'viewer-button viewer-next');
+    const caption = document.createElement('p'); caption.className = 'viewer-caption'; caption.setAttribute('aria-live','polite');
+    viewer.append(prev, next, caption);
+    let active = null, returnFocus = null;
+    function renderViewer(){
+      viewer.querySelectorAll('img,video').forEach(el => el.remove());
+      const source = active.shots[active.index].querySelector('.media-el');
+      const media = source.cloneNode(true); media.removeAttribute('loading');
+      if(media.tagName === 'VIDEO'){media.controls = true; media.autoplay = true;}
+      viewer.append(media);
+      caption.textContent = (active.index + 1) + ' / ' + active.shots.length + ' ? ' + (source.alt || 'Project preview');
+      prev.hidden = next.hidden = active.shots.length < 2;
     }
-
-    function openLightbox(mediaEl){
-      lightbox.querySelectorAll('img, video').forEach(el => el.remove());
-      let clone;
-      if(mediaEl.tagName === 'VIDEO'){
-        clone = document.createElement('video');
-        clone.src = mediaEl.currentSrc || mediaEl.src;
-        if(!clone.src){
-          const src = mediaEl.querySelector('source');
-          if(src) clone.src = src.src;
-        }
-        clone.controls = true;
-        clone.autoplay = true;
-        clone.loop = true;
-        clone.playsInline = true;
-      } else {
-        clone = document.createElement('img');
-        clone.src = mediaEl.src;
-        clone.alt = mediaEl.alt || '';
+    function open(gallery){
+      active = gallery; returnFocus = document.activeElement;
+      renderViewer(); viewer.classList.add('open'); document.body.classList.add('viewer-open'); close.focus();
+    }
+    function dismiss(){
+      if(!active) return;
+      viewer.classList.remove('open'); document.body.classList.remove('viewer-open');
+      viewer.querySelectorAll('img,video').forEach(el => el.remove()); active = null;
+      if(returnFocus) returnFocus.focus();
+    }
+    function move(delta){if(active){active.show(active.index + delta); renderViewer();}}
+    prev.addEventListener('click',()=>move(-1)); next.addEventListener('click',()=>move(1));
+    close.addEventListener('click',dismiss);
+    viewer.addEventListener('click',e=>{if(e.target===viewer) dismiss();});
+    document.addEventListener('keydown',e=>{
+      if(!active) return;
+      if(e.key==='Escape'){e.preventDefault(); dismiss();}
+      if(e.key==='ArrowLeft' || e.key==='ArrowRight'){e.preventDefault(); move(e.key==='ArrowLeft'?-1:1);}
+      if(e.key==='Tab'){
+        const buttons=[close,prev,next].filter(el=>!el.hidden);
+        const first=buttons[0], last=buttons[buttons.length-1];
+        if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}
+        else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}
       }
-      lightbox.appendChild(clone);
-      lightbox.classList.add('open');
-    }
-
-    document.querySelectorAll('.shot').forEach(shot => {
-      shot.addEventListener('click', (e) => {
-        if(document.body.classList.contains('edit-mode')) return; // let the upload button handle clicks
-        const media = shot.querySelector('.media-el');
-        if(!media) return; // nothing to preview yet (no image/video added)
-        if(media.classList.contains('is-broken')) return; // image failed to load
-        if(media.tagName === 'IMG' && !media.src) return;
-        openLightbox(media);
+    });
+    document.querySelectorAll('.grid').forEach(grid=>{
+      const shots=Array.from(grid.querySelectorAll('.shot')); if(!shots.length) return;
+      grid.classList.add(shots.length>1?'grid--gallery':'grid--single');
+      grid.setAttribute('role','region'); grid.setAttribute('aria-label','Screenshot gallery');
+      const bar=document.createElement('div'); bar.className='gallery-toolbar';
+      const back=makeButton('?','Previous image'); const forward=makeButton('?','Next image');
+      const label=document.createElement('div'); label.className='gallery-caption'; label.setAttribute('aria-live','polite');
+      const enlarge=makeButton('?','Enlarge image');
+      bar.append(back,label,forward,enlarge); grid.append(bar);
+      back.hidden=forward.hidden=shots.length<2;
+      const gallery={shots,index:0,show(index){
+        this.index=(index+shots.length)%shots.length;
+        shots.forEach((shot,i)=>{
+          shot.classList.toggle('is-active',i===this.index); shot.hidden=i!==this.index;
+          const video=shot.querySelector('video'); if(video && i!==this.index) video.pause();
+        });
+        const media=shots[this.index].querySelector('.media-el');
+        label.replaceChildren(document.createTextNode(media.alt || 'Project preview'));
+        const count=document.createElement('small'); count.textContent=(this.index+1)+' / '+shots.length+' ? Click image to enlarge'; label.append(count);
+      }};
+      back.addEventListener('click',()=>gallery.show(gallery.index-1));
+      forward.addEventListener('click',()=>gallery.show(gallery.index+1));
+      enlarge.addEventListener('click',()=>open(gallery));
+      grid.addEventListener('keydown',e=>{
+        if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();gallery.show(gallery.index+(e.key==='ArrowLeft'?-1:1));}
       });
-    });
-
-    closeBtn.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (e) => {
-      if(e.target === lightbox) closeLightbox();
-    });
-    document.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape') closeLightbox();
+      shots.forEach(shot=>{
+        shot.tabIndex=0; shot.setAttribute('role','button'); shot.setAttribute('aria-label','Enlarge '+(shot.querySelector('.media-el').alt || 'image'));
+        shot.addEventListener('click',()=>{if(!document.body.classList.contains('edit-mode')) open(gallery);});
+        shot.addEventListener('keydown',e=>{if(e.target===shot && (e.key==='Enter'||e.key===' ')){e.preventDefault();open(gallery);}});
+      });
+      gallery.show(0);
     });
   })();
 </script>
