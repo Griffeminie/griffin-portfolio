@@ -637,6 +637,20 @@
     .gallery-thumbnails{padding:10px; gap:6px;}
     .gallery-thumbnails button{flex-basis:48px; width:48px; height:44px;}
   }
+
+  /* Compact filmstrip floats over the image instead of adding another row. */
+  .gallery-thumbnails{position:absolute; left:50%; bottom:10px; transform:translateX(-50%); max-width:calc(100% - 24px); gap:5px; padding:5px; border-radius:8px; background:rgba(24,24,28,.75); backdrop-filter:blur(8px); z-index:2;}
+  .gallery-thumbnails button{flex:0 0 42px; width:42px; height:34px; border-radius:4px;}
+  .gallery-thumbnails button:first-child{margin-left:0;}
+  .gallery-thumbnails button:last-child{margin-right:0;}
+  .gallery-caption{bottom:64px; max-width:calc(100% - 80px);}
+  .viewer-thumbnails{gap:5px; padding:5px; bottom:20px; border-radius:8px;}
+  .viewer-thumbnails button{flex:0 0 42px; width:42px; height:34px; border-radius:4px;}
+  @media(max-width:600px){
+    .gallery-thumbnails{bottom:8px; max-width:calc(100% - 16px); gap:4px; padding:4px;}
+    .gallery-thumbnails button,.viewer-thumbnails button{flex-basis:36px; width:36px; height:30px;}
+    .gallery-caption{bottom:56px;}
+  }
 </style>
 </head>
 <body>
@@ -1263,7 +1277,7 @@
       bar.append(back,label,forward,enlarge); stage.append(bar); grid.append(stage);
       const strip=document.createElement('div'); strip.className='gallery-thumbnails';
       strip.setAttribute('role','group'); strip.setAttribute('aria-label','Choose an image');
-      grid.append(strip);
+      stage.append(strip);
       back.hidden=forward.hidden=shots.length<2;
       const gallery={shots,index:0,show(index){
         const direction=Math.sign(index-this.index);
