@@ -651,6 +651,13 @@
     .gallery-thumbnails button,.viewer-thumbnails button{flex-basis:36px; width:36px; height:30px;}
     .gallery-caption{bottom:56px;}
   }
+
+  .cv-document{display:block; width:100%; max-width:850px; height:auto; margin:0 auto; border:1px solid var(--paper-line); background:white;}
+
+  .gallery-caption{left:50%; top:12px; bottom:auto; transform:translateX(-50%); width:max-content; max-width:calc(100% - 136px); text-align:center;}
+  @media(max-width:600px){
+    .gallery-caption{left:50%; top:8px; bottom:auto; max-width:calc(100% - 120px);}
+  }
 </style>
 </head>
 <body>
@@ -706,8 +713,15 @@
   <section id="cv">
     <h2>Curriculum Vitae</h2>
     <div class="record">
-      <p>Download the full CV as a PDF, or review the highlights across this page.</p>
+      <p>View the CV below or download a PDF copy.</p>
       <a class="cv-btn" href="Griffin_Gil_De_Leon_cv.pdf" download>⬇ Download CV (PDF)</a>
+      <details class="certificate cv-preview">
+        <summary>View CV <span class="certificate-hint">Expand preview</span></summary>
+        <div class="certificate-content">
+          <p><a href="Griffin_Gil_De_Leon_cv.pdf" target="_blank" rel="noopener">Open CV (PDF) in a new tab</a></p>
+          <img class="cv-document" src="images/cv-preview.png" alt="Curriculum vitae of Griffin Gil De Leon. Open the PDF above for selectable text." loading="lazy">
+        </div>
+      </details>
     </div>
   </section>
 
@@ -930,8 +944,8 @@
       <div class="record">
         <span class="record-tag">Cloud Computing</span>
         <h3>Serverlesspresso Workshop</h3>
-        <p class="meta">AWS Student Community Day ? February 16, 2026</p>
-        <p class="venue">Philippine Christian University, Dasmari?as</p>
+        <p class="meta">AWS Student Community Day &middot; February 16, 2026</p>
+        <p class="venue">Philippine Christian University, Dasmari&ntilde;as</p>
         <p>A hands-on workshop building a serverless coffee-ordering application with AWS.</p>
         <div class="topics"><p class="subhead">Key takeaways</p><ul>
           <li>Event-driven workflows with Lambda, EventBridge, and Step Functions</li>
@@ -941,7 +955,7 @@
       <div class="record">
         <span class="record-tag">AI &amp; Collaboration</span>
         <h3>Unleash Collective Knowledge with Rovo AI</h3>
-        <p class="meta">Atlassian &amp; ServiceRocket ? February 27, 2026</p>
+        <p class="meta">Atlassian &amp; ServiceRocket &middot; February 27, 2026</p>
         <p class="venue">The Yard, Menarco Tower, BGC, Taguig</p>
         <p>A session on using Rovo AI to connect team knowledge and simplify everyday work.</p>
         <div class="topics"><p class="subhead">Key takeaways</p><ul>
