@@ -658,6 +658,36 @@
   @media(max-width:600px){
     .gallery-caption{left:50%; top:8px; bottom:auto; max-width:calc(100% - 120px);}
   }
+
+  .certificate[data-expanded="false"] .certificate-hint::after{transform:rotate(45deg);}
+  .certificate[data-expanded="true"] .certificate-hint::after{transform:rotate(-135deg);}
+  @media(prefers-reduced-motion:reduce){
+    .certificate summary,.certificate-hint::after{transition:none;}
+  }
+
+  /* Reveal image overlays on hover or keyboard navigation. Touch keeps controls available. */
+  .gallery-stage > .gallery-toolbar,
+  .gallery-stage > .gallery-thumbnails{transition:opacity .2s ease;}
+  @media(hover:hover) and (pointer:fine){
+    .gallery-stage > .gallery-toolbar,
+    .gallery-stage > .gallery-thumbnails{opacity:0; pointer-events:none;}
+    .gallery-stage > .gallery-toolbar button,
+    .gallery-stage > .gallery-thumbnails button{pointer-events:none;}
+    .gallery-stage:hover > .gallery-toolbar,
+    .gallery-stage:hover > .gallery-thumbnails,
+    .gallery-stage:has(:focus-visible) > .gallery-toolbar,
+    .gallery-stage:has(:focus-visible) > .gallery-thumbnails{opacity:1;}
+    .gallery-stage:hover > .gallery-thumbnails,
+    .gallery-stage:has(:focus-visible) > .gallery-thumbnails,
+    .gallery-stage:hover > .gallery-toolbar button,
+    .gallery-stage:has(:focus-visible) > .gallery-toolbar button,
+    .gallery-stage:hover > .gallery-thumbnails button,
+    .gallery-stage:has(:focus-visible) > .gallery-thumbnails button{pointer-events:auto;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .gallery-stage > .gallery-toolbar,
+    .gallery-stage > .gallery-thumbnails{transition:none;}
+  }
 </style>
 </head>
 <body>
@@ -979,6 +1009,39 @@
 </div>
 
 <script>
+  // Keep native details semantics while animating both opening and closing.
+  document.querySelectorAll('details.certificate').forEach(details => {
+    const summary = details.querySelector('summary');
+    let animation = null;
+    let expanded = details.open;
+    summary.addEventListener('click', event => {
+      if(typeof details.animate !== 'function') return;
+      event.preventDefault();
+      const startHeight = details.getBoundingClientRect().height;
+      expanded = !expanded;
+      if(animation){ animation.onfinish = null; animation.cancel(); animation = null; }
+      details.dataset.expanded = String(expanded);
+      summary.setAttribute('aria-expanded', String(expanded));
+      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        details.open = expanded;
+        return;
+      }
+      // Measure the destination at its natural height, then keep the content
+      // rendered until the closing animation has finished.
+      details.open = expanded;
+      const endHeight = details.getBoundingClientRect().height;
+      details.open = true;
+      animation = details.animate([
+        {height: startHeight + 'px'},
+        {height: endHeight + 'px'}
+      ], {duration: 220, easing: 'cubic-bezier(.2, 0, .2, 1)'});
+      animation.onfinish = () => {
+        details.open = expanded;
+        animation = null;
+      };
+    });
+  });
+
   const navLinks = document.querySelectorAll('#tabs a');
   const sections = document.querySelectorAll('main section');
 
