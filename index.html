@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Griffin Gil De Leon — Practicum Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#f2ede2;
@@ -20,7 +23,7 @@
     margin:0;
     background:var(--paper);
     color:var(--ink);
-    font-family:-apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-family:'DM Sans', sans-serif;
     background-image: linear-gradient(var(--paper-line) 1px, transparent 1px);
     background-size: 100% 32px;
   }
@@ -79,7 +82,7 @@
     margin:0 0 6px;
   }
   h1{
-    font-family:Georgia, 'Times New Roman', serif;
+    font-family:'DM Sans', sans-serif;
     font-size:38px;
     margin:0 0 8px;
     letter-spacing:.01em;
@@ -181,14 +184,14 @@
     font-weight:600;
   }
   h2{
-    font-family:Georgia, serif;
+    font-family:'DM Sans', sans-serif;
     font-size:24px;
     border-bottom:2px solid var(--ink);
     padding-bottom:8px;
     margin-top:0;
   }
   h3{
-    font-family:Georgia, serif;
+    font-family:'DM Sans', sans-serif;
     font-size:18px;
     margin:0 0 4px;
   }
@@ -581,6 +584,59 @@
     .viewer-caption{bottom:12px; left:15px; right:15px;}
   }
   @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;} .record,header,nav{animation:none; transition:none; opacity:1; transform:none;}}
+
+  /* Floating controls stay inside each image; SVGs avoid font-dependent symbols. */
+  .grid.grid--gallery, .grid.grid--single{position:relative;}
+  .gallery-toolbar{position:absolute; inset:0; padding:0; border:0; background:none; pointer-events:none; display:block;}
+  .gallery-toolbar button, #lightbox .viewer-button, #lightbox .lightbox-close{
+    display:flex; align-items:center; justify-content:center; width:44px; height:44px;
+    padding:0; border:1px solid rgba(255,255,255,.45); border-radius:50%;
+    background:rgba(30,27,22,.8); color:#fff; box-shadow:0 2px 10px rgba(0,0,0,.2);
+    cursor:pointer; pointer-events:auto; backdrop-filter:blur(8px);
+  }
+  .gallery-toolbar button{position:absolute;}
+  .gallery-toolbar button[hidden], #lightbox button[hidden]{display:none;}
+  .gallery-toolbar button:hover, #lightbox button:hover{background:var(--stamp);}
+  .gallery-previous{left:12px; top:50%; transform:translateY(-50%);}
+  .gallery-next{right:12px; top:50%; transform:translateY(-50%);}
+  .gallery-expand{right:12px; top:12px;}
+  .gallery-caption{position:absolute; left:12px; bottom:12px; max-width:calc(100% - 24px); padding:7px 12px; border-radius:6px; background:rgba(30,27,22,.8); color:#fff; font-size:12px; line-height:1.4; backdrop-filter:blur(8px);}
+  .gallery-caption small{color:#eee8dc; font-size:11px;}
+  button,input,select,textarea{font-family:inherit;}
+  @media(max-width:600px){
+    .gallery-previous{left:8px;} .gallery-next,.gallery-expand{right:8px;}
+    .gallery-caption{left:8px; bottom:8px; max-width:calc(100% - 16px); font-size:11px; padding:5px 8px;}
+  }
+
+  /* Discord-style filmstrip: selected image stays bright and outlined. */
+  #lightbox{padding-bottom:112px;}
+  #lightbox > img, #lightbox > video{max-height:calc(100dvh - 180px);}
+  #lightbox .viewer-caption{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;}
+  .viewer-thumbnails{position:absolute; bottom:22px; left:50%; transform:translateX(-50%); display:flex; gap:8px; max-width:calc(100% - 136px); padding:6px; overflow-x:auto; overscroll-behavior:contain; border-radius:12px; background:rgba(24,24,28,.85); scrollbar-width:thin; scrollbar-color:#666 transparent;}
+  .viewer-thumbnails button{flex:0 0 64px; width:64px; height:52px; padding:0; overflow:hidden; border:2px solid transparent; border-radius:7px; background:#242428; cursor:pointer; opacity:.45; transition:opacity .15s,border-color .15s;}
+  #lightbox .viewer-thumbnails img, #lightbox .viewer-thumbnails video{display:block; width:100%; height:100%; max-height:none; object-fit:cover; box-shadow:none; pointer-events:none;}
+  .viewer-thumbnails button:hover{opacity:.8;}
+  .viewer-thumbnails button.is-current{opacity:1; border-color:#fff;}
+  .viewer-thumbnails button:focus-visible{outline:2px solid #a8c7ff; outline-offset:-4px; opacity:1;}
+  @media(max-width:600px){
+    .viewer-thumbnails{bottom:22px; max-width:calc(100% - 120px); gap:6px;}
+    .viewer-thumbnails button{flex-basis:48px; width:48px; height:44px;}
+    #lightbox .viewer-button{bottom:34px;}
+  }
+
+  .gallery-stage{position:relative; overflow:hidden;}
+  .gallery-thumbnails{position:relative; display:flex; gap:8px; padding:12px; overflow-x:auto; overscroll-behavior:contain; background:#242428; scrollbar-width:thin; scrollbar-color:#777 #242428;}
+  .gallery-thumbnails button{flex:0 0 64px; width:64px; height:52px; padding:0; overflow:hidden; border:2px solid transparent; border-radius:7px; background:#343438; cursor:pointer; opacity:.45; transition:opacity .15s,border-color .15s;}
+  .gallery-thumbnails button:first-child{margin-left:auto;}
+  .gallery-thumbnails button:last-child{margin-right:auto;}
+  .gallery-thumbnails img,.gallery-thumbnails video{display:block; width:100%; height:100%; object-fit:cover; pointer-events:none;}
+  .gallery-thumbnails button:hover{opacity:.8;}
+  .gallery-thumbnails button.is-current{opacity:1; border-color:white;}
+  .gallery-thumbnails button:focus-visible{outline:2px solid #a8c7ff; outline-offset:-4px; opacity:1;}
+  @media(max-width:600px){
+    .gallery-thumbnails{padding:10px; gap:6px;}
+    .gallery-thumbnails button{flex-basis:48px; width:48px; height:44px;}
+  }
 </style>
 </head>
 <body>
@@ -756,6 +812,28 @@
 
     <div class="record">
       <span class="record-tag">Machine Problem</span>
+      <h3>NestHub</h3>
+      <p class="meta">C# · ASP.NET · Azure</p>
+      <p>A web application built with ASP.NET and deployed on Microsoft Azure.</p>
+      <div class="grid">
+        <div class="shot" data-basename="nesthub-property">
+          <img class="media-el" src="images/nesthub-property.jpg" alt="NestHub property details">
+        </div>
+        <div class="shot" data-basename="nesthub-profile">
+          <img class="media-el" src="images/nesthub-profile.jpg" alt="NestHub profile and recently viewed properties">
+        </div>
+        <div class="shot" data-basename="nesthub-agent">
+          <img class="media-el" src="images/nesthub-agent.jpg" alt="NestHub agent profile">
+        </div>
+        <div class="shot" data-basename="nesthub-mobile">
+          <img class="media-el" src="images/nesthub-mobile.jpg" alt="NestHub mobile layouts">
+        </div>
+      </div>
+      <p><strong>Software used:</strong> Visual Studio, ASP.NET Web Forms, Microsoft Azure</p>
+    </div>
+
+    <div class="record">
+      <span class="record-tag">Machine Problem</span>
       <h3>Talipaap — Mobile Market App</h3>
       <p class="meta">Android · Firebase</p>
       <p>A Firebase-powered Android app for local market shopping with real-time data and a streamlined shopping experience.</p>
@@ -785,32 +863,6 @@
       </div>
       <p><strong>Software used:</strong> Arduino IDE, Firebase</p>
     </div>
-
-    <div class="record">
-      <span class="record-tag">Machine Problem</span>
-      <h3>NestHub</h3>
-      <p class="meta">C# · ASP.NET · Azure</p>
-      <p>A web application built with ASP.NET and deployed on Microsoft Azure.</p>
-      <div class="grid">
-        <div class="shot" data-basename="nesthub-property">
-          <img class="media-el" src="images/nesthub-property.jpg" alt="NestHub property details">
-        </div>
-        <div class="shot" data-basename="nesthub-profile">
-          <img class="media-el" src="images/nesthub-profile.jpg" alt="NestHub profile and recently viewed properties">
-        </div>
-        <div class="shot" data-basename="nesthub-agent">
-          <img class="media-el" src="images/nesthub-agent.jpg" alt="NestHub agent profile">
-        </div>
-        <div class="shot" data-basename="nesthub-mobile">
-          <img class="media-el" src="images/nesthub-mobile.jpg" alt="NestHub mobile layouts">
-        </div>
-        <div class="shot" data-basename="nesthub-database">
-          <img class="media-el" src="images/nesthub-database.jpg" alt="NestHub database diagram">
-        </div>
-      </div>
-      <p><strong>Software used:</strong> Visual Studio, ASP.NET Web Forms, Microsoft Azure</p>
-    </div>
-
   </section>
 
   <section id="skills-certs">
@@ -1101,37 +1153,89 @@
     viewer.setAttribute('aria-modal', 'true');
     viewer.setAttribute('aria-label', 'Image gallery');
     const close = viewer.querySelector('.lightbox-close');
-    const makeButton = (text, label, cls) => {
+    const icons = {
+      previous: '<path d="m15 18-6-6 6-6"/>',
+      next: '<path d="m9 6 6 6-6 6"/>',
+      expand: '<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',
+      close: '<path d="m6 6 12 12M6 18 18 6"/>'
+    };
+    const iconMarkup = name => '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + icons[name] + '</svg>';
+    close.innerHTML = iconMarkup('close');
+    close.title = 'Close viewer';
+    const makeButton = (icon, label, cls) => {
       const button = document.createElement('button');
-      button.type = 'button'; button.textContent = text;
+      button.type = 'button'; button.innerHTML = iconMarkup(icon);
       button.setAttribute('aria-label', label); button.title = label; button.className = cls || '';
       return button;
     };
-    const prev = makeButton('?', 'Previous image', 'viewer-button viewer-prev');
-    const next = makeButton('?', 'Next image', 'viewer-button viewer-next');
+    const prev = makeButton('previous', 'Previous image', 'viewer-button viewer-prev');
+    const next = makeButton('next', 'Next image', 'viewer-button viewer-next');
     const caption = document.createElement('p'); caption.className = 'viewer-caption'; caption.setAttribute('aria-live','polite');
-    viewer.append(prev, next, caption);
+    const thumbnails = document.createElement('div');
+    thumbnails.className = 'viewer-thumbnails';
+    thumbnails.setAttribute('role', 'group');
+    thumbnails.setAttribute('aria-label', 'Choose an image');
+    viewer.append(prev, next, caption, thumbnails);
     let active = null, returnFocus = null;
-    function renderViewer(){
-      viewer.querySelectorAll('img,video').forEach(el => el.remove());
+    function slideIn(element, direction){
+      if(!direction || typeof element.animate !== 'function' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      element.getAnimations().forEach(animation => animation.cancel());
+      element.animate([
+        { transform: 'translateX(' + (direction > 0 ? 36 : -36) + 'px)', opacity: .35 },
+        { transform: 'translateX(0)', opacity: 1 }
+      ], { duration: 200, easing: 'ease-out' });
+    }
+    function thumbnailButton(source, index, select){
+      const button = document.createElement('button'); button.type = 'button';
+      button.setAttribute('aria-label', 'View image ' + (index + 1) + ': ' + (source.alt || 'Project preview'));
+      button.title = source.alt || 'Image ' + (index + 1);
+      const preview = document.createElement(source.tagName === 'VIDEO' && !source.poster ? 'video' : 'img');
+      preview.src = source.poster || source.currentSrc || source.src;
+      if(preview.tagName === 'VIDEO'){preview.muted = true; preview.preload = 'metadata';}
+      else preview.alt = '';
+      preview.setAttribute('aria-hidden', 'true'); button.append(preview);
+      button.addEventListener('click', select);
+      return button;
+    }
+    function selectThumbnail(strip, index){
+      strip.querySelectorAll('button').forEach((button, i) => {
+        const selected = i === index;
+        button.classList.toggle('is-current', selected);
+        button.setAttribute('aria-pressed', String(selected));
+        if(selected) strip.scrollLeft = button.offsetLeft - (strip.clientWidth - button.offsetWidth) / 2;
+      });
+    }
+    function renderViewer(direction = 0){
+      viewer.querySelectorAll(':scope > img, :scope > video').forEach(el => el.remove());
       const source = active.shots[active.index].querySelector('.media-el');
       const media = source.cloneNode(true); media.removeAttribute('loading');
       if(media.tagName === 'VIDEO'){media.controls = true; media.autoplay = true;}
       viewer.append(media);
-      caption.textContent = (active.index + 1) + ' / ' + active.shots.length + ' ? ' + (source.alt || 'Project preview');
+      caption.textContent = (source.alt || 'Project preview') + ', image ' + (active.index + 1) + ' of ' + active.shots.length;
+      selectThumbnail(thumbnails, active.index);
+      slideIn(media, direction);
       prev.hidden = next.hidden = active.shots.length < 2;
     }
     function open(gallery){
       active = gallery; returnFocus = document.activeElement;
-      renderViewer(); viewer.classList.add('open'); document.body.classList.add('viewer-open'); close.focus();
+      thumbnails.replaceChildren();
+      gallery.shots.forEach((shot, index) => {
+        const source = shot.querySelector('.media-el');
+        const button = thumbnailButton(source, index, () => {
+          const direction = Math.sign(index - gallery.index);
+          gallery.show(index); renderViewer(direction);
+        });
+        thumbnails.append(button);
+      });
+      viewer.classList.add('open'); renderViewer(); document.body.classList.add('viewer-open'); close.focus();
     }
     function dismiss(){
       if(!active) return;
       viewer.classList.remove('open'); document.body.classList.remove('viewer-open');
-      viewer.querySelectorAll('img,video').forEach(el => el.remove()); active = null;
+      viewer.querySelectorAll(':scope > img, :scope > video').forEach(el => el.remove()); active = null;
       if(returnFocus) returnFocus.focus();
     }
-    function move(delta){if(active){active.show(active.index + delta); renderViewer();}}
+    function move(delta){if(active){active.show(active.index + delta); renderViewer(delta);}}
     prev.addEventListener('click',()=>move(-1)); next.addEventListener('click',()=>move(1));
     close.addEventListener('click',dismiss);
     viewer.addEventListener('click',e=>{if(e.target===viewer) dismiss();});
@@ -1140,7 +1244,7 @@
       if(e.key==='Escape'){e.preventDefault(); dismiss();}
       if(e.key==='ArrowLeft' || e.key==='ArrowRight'){e.preventDefault(); move(e.key==='ArrowLeft'?-1:1);}
       if(e.key==='Tab'){
-        const buttons=[close,prev,next].filter(el=>!el.hidden);
+        const buttons=[close,prev,next,...thumbnails.querySelectorAll('button')].filter(el=>!el.hidden);
         const first=buttons[0], last=buttons[buttons.length-1];
         if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}
         else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}
@@ -1151,12 +1255,18 @@
       grid.classList.add(shots.length>1?'grid--gallery':'grid--single');
       grid.setAttribute('role','region'); grid.setAttribute('aria-label','Screenshot gallery');
       const bar=document.createElement('div'); bar.className='gallery-toolbar';
-      const back=makeButton('?','Previous image'); const forward=makeButton('?','Next image');
+      const back=makeButton('previous','Previous image', 'gallery-previous'); const forward=makeButton('next','Next image', 'gallery-next');
       const label=document.createElement('div'); label.className='gallery-caption'; label.setAttribute('aria-live','polite');
-      const enlarge=makeButton('?','Enlarge image');
-      bar.append(back,label,forward,enlarge); grid.append(bar);
+      const enlarge=makeButton('expand','Enlarge image', 'gallery-expand');
+      const stage=document.createElement('div'); stage.className='gallery-stage';
+      shots.forEach(shot=>stage.append(shot));
+      bar.append(back,label,forward,enlarge); stage.append(bar); grid.append(stage);
+      const strip=document.createElement('div'); strip.className='gallery-thumbnails';
+      strip.setAttribute('role','group'); strip.setAttribute('aria-label','Choose an image');
+      grid.append(strip);
       back.hidden=forward.hidden=shots.length<2;
       const gallery={shots,index:0,show(index){
+        const direction=Math.sign(index-this.index);
         this.index=(index+shots.length)%shots.length;
         shots.forEach((shot,i)=>{
           shot.classList.toggle('is-active',i===this.index); shot.hidden=i!==this.index;
@@ -1164,7 +1274,8 @@
         });
         const media=shots[this.index].querySelector('.media-el');
         label.replaceChildren(document.createTextNode(media.alt || 'Project preview'));
-        const count=document.createElement('small'); count.textContent=(this.index+1)+' / '+shots.length+' ? Click image to enlarge'; label.append(count);
+        selectThumbnail(strip, this.index);
+        slideIn(media, direction);
       }};
       back.addEventListener('click',()=>gallery.show(gallery.index-1));
       forward.addEventListener('click',()=>gallery.show(gallery.index+1));
@@ -1177,6 +1288,7 @@
         shot.addEventListener('click',()=>{if(!document.body.classList.contains('edit-mode')) open(gallery);});
         shot.addEventListener('keydown',e=>{if(e.target===shot && (e.key==='Enter'||e.key===' ')){e.preventDefault();open(gallery);}});
       });
+      shots.forEach((shot,index)=>strip.append(thumbnailButton(shot.querySelector('.media-el'), index, ()=>gallery.show(index))));
       gallery.show(0);
     });
   })();
